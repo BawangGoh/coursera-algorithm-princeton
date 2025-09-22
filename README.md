@@ -6,8 +6,8 @@
         <li>
             <a href="#course-description">Course Description</a>
             <ul>
-                <li><a href="#course-algo-1-princeton-university">Algorithm, Part 1 (Princeton University)</a></li>
-                <li><a href="#course-algo-2-princeton-university">Algorithm, Part 2 (Princeton University)</a></li>
+                <li><a href="#algorithm-part-1-princeton-university">Algorithm, Part 1 (Princeton University)</a></li>
+                <li><a href="#algorithm-part-2-princeton-university">Algorithm, Part 2 (Princeton University)</a></li>
             </ul>
         </li>
         <li>
