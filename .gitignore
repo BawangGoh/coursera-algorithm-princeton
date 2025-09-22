@@ -1,3 +1,8 @@
+# Environment folders
+.idea/
+.git/
+.lift/
+
 # Compiled class file
 *.class
 
