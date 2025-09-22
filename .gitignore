@@ -3,6 +3,9 @@
 .git/
 .lift/
 
+# IntelliJ IDEA module file
+*.iml
+
 # Compiled class file
 *.class
 
