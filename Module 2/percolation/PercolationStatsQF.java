@@ -9,7 +9,7 @@ import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StdStats;
 import edu.princeton.cs.algs4.Stopwatch;
 
-public class PercolationStats {
+public class PercolationStatsQF {
     // Private attributes
     private double[] estimates;
 
@@ -20,7 +20,7 @@ public class PercolationStats {
      * @param n      dimension of the grid
      * @param trials number of trials
      */
-    public PercolationStats(int n, int trials) {
+    public PercolationStatsQF(int n, int trials) {
         // Throw an IllegalArgumentException in the constructor if either n ≤ 0 or trials ≤ 0.
         if (n <= 0 || trials <= 0) {
             throw new IllegalArgumentException("n or trials must be positive value");
@@ -31,7 +31,7 @@ public class PercolationStats {
 
         // Repeat experiment T trials and averaging the results
         for (int k = 0; k < trials; k++) {
-            Percolation percolation = new Percolation(n);
+            PercolationQF percolation = new PercolationQF(n);
 
             // Choose to open a site uniformly at random until the system percolates
             while (!percolation.percolates()) {
@@ -80,14 +80,14 @@ public class PercolationStats {
         int n = StdIn.readInt();
         int trials = StdIn.readInt();
 
-        // Instantiated stopwatch object for calculating elapsed time for Weighted Quick Union
+        // Instantiated stopwatch object for calculating elapsed time for Quick Find
         Stopwatch stopwatch = new Stopwatch();
-        PercolationStats obj = new PercolationStats(n, trials);
+        PercolationStatsQF obj = new PercolationStatsQF(n, trials);
         double time = stopwatch.elapsedTime();
-        StdOut.println("Weighted Quick Union elapsed time: " + time);
+        StdOut.println("Quick Find elapsed time: " + time);
         StdOut.printf("%-23s = %f%n", "mean", obj.mean());
         StdOut.printf("%-23s = %f%n", "stddev", obj.stddev());
         StdOut.printf("%-23s = [%f, %f]%n", "95% confidence interval", obj.confidenceLo(),
-                      obj.confidenceHi());
+                obj.confidenceHi());
     }
 }

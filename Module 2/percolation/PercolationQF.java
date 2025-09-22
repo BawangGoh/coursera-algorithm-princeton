@@ -3,22 +3,12 @@
  *  Last modified:     18/9/2025
  **************************************************************************** */
 
-/* *****************************************************************************
- * Percolation. Given a composite systems comprised of randomly distributed
- * insulating and metallic materials: what fraction of the materials need to be
- * metallic so that the composite system is an electrical conductor? Given a
- * porous landscape with water on the surface (or oil below), under what
- * conditions will the water be able to drain through to the bottom (or the oil
- * to gush through to the surface)? Scientists have defined an abstract process
- * known as percolation to model such situations.
- **************************************************************************** */
+import edu.princeton.cs.algs4.QuickFindUF;
 
-import edu.princeton.cs.algs4.WeightedQuickUnionUF;
-
-// Percolation using weighted quick union algorithm
-public class Percolation {
+// Percolation using quick find algorithm
+public class PercolationQF {
     // Private attribute for initial state
-    private WeightedQuickUnionUF uf;
+    private QuickFindUF uf;
     private boolean[][] grid;
     private int virtualTop;
     private int virtualBtm;
@@ -31,7 +21,7 @@ public class Percolation {
      *
      * @param n dimension of the grid
      */
-    public Percolation(int n) {
+    public PercolationQF(int n) {
         // Throw an IllegalArgumentException in the constructor if n ≤ 0.
         if (n <= 0) {
             throw new IllegalArgumentException("n must be positive value");
@@ -41,7 +31,7 @@ public class Percolation {
         grid = new boolean[n][n];
 
         // Initialized (N * N) + 2 virtual sites union-find data structure
-        uf = new WeightedQuickUnionUF(n * n + 2);
+        uf = new QuickFindUF(n * n + 2);
 
         // Initialized virtual top and bottom object
         virtualTop = 0;
@@ -122,12 +112,6 @@ public class Percolation {
     /* *****************************************************************************
     Private method for transforming 2D grid indexes into 1D index
     index = (row * size of grid) + column
-    Let suppose 3 x 3 grid setting,
-    (0, 0)  (0, 1)  (0, 2)
-    (1, 0)  (1, 1)  (1, 2)  => [0, 1, 2, 3, 4, 5, 6, 7, 8]
-    (2, 0)  (2, 1)  (2, 2)
-    (1, 1) = (1 * 3) + 1 = 4
-    (2, 2) = (2 * 3) + 2 = 8
     ***************************************************************************** */
     private int get1DIndex(int row, int col) {
         checkGrid(row, col);
@@ -147,7 +131,7 @@ public class Percolation {
 
     // test client (optional)
     public static void main(String[] args) {
-        Percolation obj = new Percolation(5);
+        PercolationQF obj = new PercolationQF(5);
         obj.open(1, 3);
         obj.open(2, 3);
         obj.open(3, 1);
