@@ -4,7 +4,7 @@
     <summary>Table of Contents</summary>
     <ol>
         <li>
-            <a href="#about-the-project">Course Description</a>
+            <a href="#course-description">Course Description</a>
             <ul>
                 <li><a href="#course-algo-1">Algorithm, Part 1 (Princeton University)</a></li>
                 <li><a href="#course-algo-2">Algorithm, Part 2 (Princeton University)</a></li>
@@ -18,7 +18,7 @@
             </ul>
         </li>
         <li>
-            <a href="#content">Contents</a>
+            <a href="#contents">Contents</a>
         </li>
     </ol>
 </details>
