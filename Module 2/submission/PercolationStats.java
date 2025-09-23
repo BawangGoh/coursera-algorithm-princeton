@@ -81,10 +81,10 @@ public class PercolationStats {
         int trials = Integer.parseInt(args[1]);
 
         // Instantiated stopwatch object for calculating elapsed time for Weighted Quick Union
-        Stopwatch stopwatch = new Stopwatch();
+//        Stopwatch stopwatch = new Stopwatch();
         PercolationStats obj = new PercolationStats(n, trials);
-        double time = stopwatch.elapsedTime();
-        StdOut.println("Weighted Quick Union elapsed time: " + time);
+//        double time = stopwatch.elapsedTime();
+//        StdOut.println("Weighted Quick Union elapsed time: " + time);
         StdOut.printf("%-23s = %f%n", "mean", obj.mean());
         StdOut.printf("%-23s = %f%n", "stddev", obj.stddev());
         StdOut.printf("%-23s = [%f, %f]%n", "95% confidence interval", obj.confidenceLo(),
