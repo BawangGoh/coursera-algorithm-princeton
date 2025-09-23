@@ -77,8 +77,8 @@ public class PercolationStats {
 
     // test client (option)
     public static void main(String[] args) {
-        int n = StdIn.readInt();
-        int trials = StdIn.readInt();
+        int n = Integer.parseInt(args[0]);
+        int trials = Integer.parseInt(args[1]);
 
         // Instantiated stopwatch object for calculating elapsed time for Weighted Quick Union
         Stopwatch stopwatch = new Stopwatch();
