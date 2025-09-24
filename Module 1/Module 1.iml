@@ -6,12 +6,9 @@
       <sourceFolder url="file://$MODULE_DIR$/hello" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/hello [COS 126]" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/hello [COS 226]" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/submission" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name=".lift5" level="project" />
-    <orderEntry type="library" name=".lift6" level="project" />
-    <orderEntry type="library" name=".lift" level="project" />
-    <orderEntry type="library" name=".lift2" level="project" />
   </component>
 </module>
