@@ -1,7 +1,7 @@
 /* *****************************************************************************
  *  Name:              Dennis Goh Jia Wang
  *  Last modified:     24/9/2025
- *  Interview Question: Analysis of Algorithms (Experiment)
+ *  Interview Question: Analysis of Algorithms (Quiz)
  **************************************************************************** */
 
 /* *****************************************************************************
@@ -23,6 +23,7 @@ import edu.princeton.cs.algs4.Stopwatch;
 // import edu.princeton.cs.algs4.ThreeSumFast;
 
 /* *****************************************************************************
+ * Solution
  * There are 4 methods to solve the 3-SUM problem:
  * 1. Brute force method (Nested for loops)
  * 2. Binary search method
