@@ -25,7 +25,7 @@ import edu.princeton.cs.algs4.StdOut;
  **************************************************************************** */
 
 // Create weighted quick union data structure
-public class UnionFindMax {
+public class UFMaxCanonical {
     protected int[] max;      // max[i] = largest element in connected component i
     protected int[] parent;   // parent[i] = parent of i
     protected int[] size;     // size[i] = number of elements in subtree rooted at i
@@ -39,7 +39,7 @@ public class UnionFindMax {
      * @param  n the number of elements
      * @throws IllegalArgumentException if {@code n < 0}
      */
-    public UnionFindMax(int n) {
+    public UFMaxCanonical(int n) {
         count = n;
         parent = new int[n];
         size = new int[n];
@@ -108,38 +108,47 @@ public class UnionFindMax {
      * Update the largest number in connected components whenever union happened
      * For example, in Union.pdf, weighted quick union demo page 32
      *      parent[] = 0 1 2 3 4 5 6 7 8 9
+     * -------------------------------------------------------
      * union(parent[4], parent[3]):
      * max(root(4), root(3)) => max(4, 3) => root(4) = 4
      *      parent[] = 0 1 2 4 4 5 6 7 8 9
      *      max[]    = 0 1 2 3 4 5 6 7 8 9
+     * -------------------------------------------------------
      * union(parent[3], parent[8]):
      * max(root(3), root(8)) => max(4, 8) => root(4) = 8
      *      parent[] = 0 1 2 4 4 5 6 7 4 9
      *      max[]    = 0 1 2 3 8 5 6 7 8 9
+     * -------------------------------------------------------
      * union(parent[6], parent[5]):
      * max(root(6), root(5)) => max(6, 5) => root(6) = 6
      *      parent[] = 0 1 2 4 4 6 6 7 4 9
      *      max[]    = 0 1 2 3 8 5 6 7 8 9
+     * -------------------------------------------------------
      * union(parent[9], parent[4]):
      * max(root(9), root(4)) => max(8, 9) => root(4) = 9
      *      parent[] = 0 1 2 4 4 6 6 7 4 4
      *      max[]    = 0 1 2 3 9 5 6 7 8 9
+     * -------------------------------------------------------
      * union(parent[2], parent[1]):
      * max(root(2), root(1)) => max(2, 1) => root(2) = 2
      *      parent[] = 0 2 2 4 4 6 6 7 4 4
      *      max[]    = 0 1 2 3 9 5 6 7 8 9
+     * -------------------------------------------------------
      * union(parent[5], parent[0]):
      * max(root(5), root(0)) => max(6, 0) => root(6) = 6
      *      parent[] = 6 2 2 4 4 6 6 7 4 4
      *      max[]    = 0 1 2 3 9 5 6 7 8 9
+     * -------------------------------------------------------
      * union(parent[7], parent[2]):
      * max(root(7), root(2)) => max(7, 2) => root(2) = 7
      *      parent[] = 6 2 2 4 4 6 6 2 4 4
      *      max[]    = 0 1 7 3 9 5 6 7 8 9
+     * -------------------------------------------------------
      * union(parent[6], parent[1]):
      * max(root(6), root(1)) => max(6, 7) => root(6) = 7
      *      parent[] = 6 2 6 4 4 6 6 2 4 4
      *      max[]    = 0 1 7 3 9 5 7 7 8 9
+     * -------------------------------------------------------
      * union(parent[7], parent[3]):
      * max(root(7), root(3)) => max(7, 9) => root(6) = 9
      *      parent[] = 6 2 6 4 6 6 6 2 4 4
@@ -180,9 +189,14 @@ public class UnionFindMax {
         }
     }
 
+    // Count the number of connected components
+    public int getComp() {
+        return count;
+    }
+
     // test client (optional)
     public static void main(String[] args) {
-        UnionFindMax uf = new UnionFindMax(10);
+        UFMaxCanonical uf = new UFMaxCanonical(10);
         uf.union(4, 3);
         uf.union(3, 8);
         uf.union(6, 5);

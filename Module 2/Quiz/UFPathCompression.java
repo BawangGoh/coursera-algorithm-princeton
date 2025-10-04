@@ -20,8 +20,8 @@ import edu.princeton.cs.algs4.StdOut;
  * This is the extension of Union Find data structure with Path Compression.
  **************************************************************************** */
 
-// Extend the previous UnionFindMax class to add in a new path compression method
-public class UFPathCompression extends UnionFindMax {
+// Extend the previous UFMaxCanonical class to add in a new path compression method
+public class UFPathCompression extends UFMaxCanonical {
     // Inherit the superclass constructor
     public UFPathCompression(int n) {
         super(n);
@@ -70,46 +70,55 @@ public class UFPathCompression extends UnionFindMax {
     /* *****************************************************************************
      * Weighted Quick Union with Path Compression
      *      parent[] = 0 1 2 3 4 5 6 7 8 9
+     * -------------------------------------------------------
      * union(parent[4], parent[3]):
      * No Path Compression (normal union) {3 -> 4}
      * max(root(4), root(3)) => max(4, 3) => root(4) = 4
      *      parent[] = 0 1 2 4 4 5 6 7 8 9
      *      max[]    = 0 1 2 3 4 5 6 7 8 9
+     * -------------------------------------------------------
      * union(parent[3], parent[8]):
      * No Path Compression (normal union) {3 -> 4 <- 8}
      * max(root(3), root(8)) => max(4, 8) => root(4) = 8
      *      parent[] = 0 1 2 4 4 5 6 7 4 9
      *      max[]    = 0 1 2 3 8 5 6 7 8 9
+     * -------------------------------------------------------
      * union(parent[6], parent[5]):
      * No Path Compression (normal union) {5 -> 6}
      * max(root(6), root(5)) => max(6, 5) => root(6) = 6
      *      parent[] = 0 1 2 4 4 6 6 7 4 9
      *      max[]    = 0 1 2 3 8 5 6 7 8 9
+     * -------------------------------------------------------
      * union(parent[9], parent[4]):
      * No Path Compression (normal union) {3 -> 4 <- 8 <-- 9}
      * max(root(9), root(4)) => max(8, 9) => root(4) = 9
      *      parent[] = 0 1 2 4 4 6 6 7 4 4
      *      max[]    = 0 1 2 3 9 5 6 7 8 9
+     * -------------------------------------------------------
      * union(parent[2], parent[1]):
      * No Path Compression (normal union) {1 -> 2}
      * max(root(2), root(1)) => max(2, 1) => root(2) = 2
      *      parent[] = 0 2 2 4 4 6 6 7 4 4
      *      max[]    = 0 1 2 3 9 5 6 7 8 9
+     * -------------------------------------------------------
      * union(parent[5], parent[0]):
      * No Path Compression (normal union) {0 -> 6 <- 5}
      * max(root(5), root(0)) => max(6, 0) => root(6) = 6
      *      parent[] = 6 2 2 4 4 6 6 7 4 4
      *      max[]    = 0 1 2 3 9 5 6 7 8 9
+     * -------------------------------------------------------
      * union(parent[7], parent[2]):
      * No Path Compression (normal union) {1 -> 2 <- 7}
      * max(root(7), root(2)) => max(7, 2) => root(2) = 7
      *      parent[] = 6 2 2 4 4 6 6 2 4 4
      *      max[]    = 0 1 7 3 9 5 6 7 8 9
+     * -------------------------------------------------------
      * union(parent[6], parent[1]):
      * No Path Compression (normal union) {2 -> 6}
      * max(root(6), root(1)) => max(6, 7) => root(6) = 7
      *      parent[] = 6 2 6 4 4 6 6 2 4 4
      *      max[]    = 0 1 7 3 9 5 7 7 8 9
+     * -------------------------------------------------------
      * union(parent[7], parent[3]):
      * Path Compression (root(7)) => {6 -> 7}
      * max(root(7), root(3)) => max(7, 9) => root(6) = 9
