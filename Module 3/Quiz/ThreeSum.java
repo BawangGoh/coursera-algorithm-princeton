@@ -181,10 +181,13 @@ public class ThreeSum {
      * -40 -20 -10 0 5 10 30 40
      * a[i] a[j] a[k]  ...
      * a[i] + a[j] + a[k] = 0
+     * ------------------------------------------------------------------------
      * First iteration: fix a
      * a[j] + a[k] = -a[i]
+     * ------------------------------------------------------------------------
      * Second iteration: fix b
      * a[k] = -a[i]-a[j]
+     * ------------------------------------------------------------------------
      * if hasKey(-a[i]-a[j]), triplets found, otherwise store current a[k] in hash
      * in future, a[k] = -a[i]-a[j] such that hash find a[k] in O(1) time and will
      * return triplet since a[k] is subset of array a
