@@ -46,12 +46,4 @@ public class EggDropBuilding {
     public boolean eggBreaks(int floor) {
         return floor >= k;
     }
-
-    // Test client
-    public static void main(String[] args) {
-        EggDropBuilding building = new EggDropBuilding(100, 49);
-        int floorT = building.getThreshold();
-        int totalFloor = building.getTotalFloor();
-        StdOut.println(floorT);
-    }
 }
