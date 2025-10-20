@@ -43,7 +43,7 @@ public class UFSocialNetwork {
     * Utilize builder design pattern to separate data model (Log data) and logic
     * container (log loader method) to a cleaner and more modular codebase
     e.g.
-    1) The clas is both data model and logic container
+    1) The class is both data model and logic container
     public class UFSocialNetwork {
         String timestamp;
         private int userA;
