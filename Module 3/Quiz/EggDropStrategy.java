@@ -144,8 +144,9 @@ public class EggDropStrategy {
          * Version 2: ~log2(T) eggs and ~2log2(T) tosses.
          * Constraint: T is unknown but small
          * Strategy: Exponential search to find range nearest to T such that
-         * k = log2(T) -> T = 2^k from 1, 2, 4, 8, ... -> , then binary search
-         * within [k/2, k] if egg breaks.
+         * T is within [L, R] where R - L < 2T. Drop the egg at k = log2(T) ->
+         * T = 2^k from 1, 2, 4, 8, ...
+         * If the egg breaks, then binary search within [2^(k - 1) + 1, 2^k]
          * Worst case: ~2log2(T)
          ******************************************************************** */
         VERSION_2 {
@@ -187,7 +188,7 @@ public class EggDropStrategy {
          * Constraint: Only 2 eggs, we must minimize the risk
          * Strategy: Drop the first egg in the interval of sqrt(n) e.g. n = 100,
          * -> sqrt(n) = 10, 2 * sqrt(n) = 20, ..., then linear search within
-         * [k * sqrt(n) + 1, (k - 1) * sqrt(n) - 1] if egg breaks
+         * [(k - 1) * sqrt(n) + 1, k * sqrt(n) - 1] if egg breaks
          * Worst case: ~2sqrt(n)
          ******************************************************************** */
         VERSION_3 {
@@ -222,70 +223,51 @@ public class EggDropStrategy {
 
         /* *********************************************************************
          * Version 4: 2 eggs and <= C * sqrt(T) tosses.
-         * Constraint: T is unknown and tosses is bound by a constant C * sqrt(T)
-         * Strategy: Similar as Version 3, use a easier approach by finding the
-         * nearest number to interval (sqrt(T)). Suppose k = C * sqrt(T) ->
-         * C = sqrt(T) -> k = sqrt(T) * sqrt(T) -> 1, 4, 9, 16, ..., then linear
-         * search within [(sqrtT - 1) * (sqrtT - 1) + 1, (sqrtT * sqrtT) - 1]
-         * Worst case: <= C * sqrt(T)
+         * Constraint: T is unknown and tosses is bound by C * sqrt(T)
+         * Strategy: We need to minimize the worst-case # of tosses. Using
+         * triangular number strategy to ensure complete coverage of all floors.
+         * Let suppose first drop an egg at t floor
+         * 1) If egg breaks, we have to checks 1, 2, ..., (t - 2), (t - 1)
+         * floors, so total # of drops is t
+         * 2) If it doesn't break, then we jump the interval to [t + (t - 1)]
+         * floors
+         * 3) If it break on [t + (t - 1)] floor, then we have to checks the
+         * floors on (t + 1), (t + 2), ... [t + (t - 1) -1].
+         * 4) In 2nd drop break case, the total # of tosses will be
+         * [t + (t - 1) - 1] - (t + 1) + 1 + 2 (1st & 2nd drop eggs) = t
+         * ---------------------------------------------------------------------
+         * Suppose the minimum # of tosses in worst case, then the egg drop t
+         * floor covering t floors, then drop at [t + (t - 1)] floor covering
+         * (t - 1) floors, then drop at [t + (t - 1) + (t - 2)] floor covering
+         * (t - 2) floors, ...
+         * This give us the triangular sum:
+         * t + (t - 1) + (t - 2) + ... + 2 + 1 = t(t + 1)/2
+         * triangular number:
+         * t_k = t(t + 1)/2
+         * ---------------------------------------------------------------------
+         * Since T is an unknown, we can start tossing the eggs on triangular
+         * numbers such that 1, 3, 6, 10, ... to get the number nearest to T,
+         * then linear search from t_{k-1} + 1 to t_{k} - 1
+         * Worst case: <= sqrt(2) * sqrt(T)
          ******************************************************************** */
         VERSION_4 {
             @Override
             public Result findThreshold(EggDropBuilding building) {
-                // For simplicity, let C = sqrt(T), sqrt(T) = 1, 2, 3, ...
-                int sqrtT = 1;
+                Result result = new Result();
+                int curr = 0;
+                int interval = 1;
                 int n = building.getTotalFloor();
 
-                // Interval search to nearest threshold floor
-                Result result = new Result();
-                while (sqrtT * sqrtT < n) {
-                    if (toss(sqrtT * sqrtT, result, building))
-                        break;
-                    sqrtT++;
-                }
-
-                // Brute-force linear search (When egg break, search (sqrtT - 1) * (sqrtT - 1) to (sqrtT * sqrtT) interval)
-                for (int i = (sqrtT - 1) * (sqrtT - 1) + 1; i < sqrtT * sqrtT; i++) {
-                    if (toss(i, result, building)) {
-                        break;
-                    }
-                }
-                return result;
-            }
-
-            @Override
-            public Result getWorstCase(EggDropBuilding building) {
-                return new Result(2, 3 * sqrt(building.getThreshold()));
-            }
-        },
-
-        /* *********************************************************************
-         * Version 5: 2 eggs and <= C * sqrt(T) tosses.
-         * Constraint: T is unknown and tosses is bound by a constant C * sqrt(T)
-         * Strategy: Similar as Version 4, fix the constant C = 3 and find the
-         * nearest threshold by interval = sqrt(n) / C. then linear search
-         * within [(k - 1) * interval + 1, k * interval - 1]
-         * Worst case: <= C * sqrt(T)
-         ******************************************************************** */
-        VERSION_5 {
-            @Override
-            public Result findThreshold(EggDropBuilding building) {
-                Result result = new Result();
-                int n = building.getTotalFloor();
-                int C = 3;
-                int interval = (int) Math.ceil(Math.sqrt(building.getTotalFloor()) / C);
-                int prev = 0;
-                int curr = interval;
-
+                // Drop first egg on triangular numbers of floor
                 while (curr < n) {
+                    curr += interval;   // 1, 3, 6, 10,...
                     if (toss(curr, result, building))
                         break;
-                    prev = curr;
-                    curr += interval;
+                    interval++;     // 1, 2, 3, 4, ...
                 }
 
-                // Brute-force linear search (When egg break, search (sqrtT - 1) * (sqrtT - 1) to (sqrtT * sqrtT) interval)
-                for (int i = prev + 1; i < Math.min(curr, n); i++) {
+                // Brute-force linear search if egg break
+                for (int i = (curr - interval) + 1; i < curr; i++) {
                     if (toss(i, result, building)) {
                         break;
                     }
@@ -293,9 +275,30 @@ public class EggDropStrategy {
                 return result;
             }
 
+            /* *****************************************************************
+             * Let suppose the # of tosses = t(t - 1)/2 >= n in order to cover
+             * every floors.
+             *      t(t - 1)/2 ~ t^2/2 >= n => t >= sqrt(2n)
+             * Let consider the worst case that threshold floor is at the last
+             * floor T = n
+             *      # of tosses ~ sqrt(2T) ~ sqrt(2) * sqrt(T)
+             * Connecting to the constraint,
+             *      # of tosses <= C * sqrt(T)
+             *      sqrt(2) * sqrt(T) <= C * sqrt(T)
+             *      C >= sqrt(2)
+             * Including linear search, the worst-case total tosses:
+             *      # of tosses <= sqrt(2T) + sqrt(2T) = 2 * sqrt(2T)
+             * Connecting to the constraint,
+             *      # of tosses <= C * sqrt(T)
+             *      2 * sqrt(2) * sqrt(T) <= C * sqrt(T)
+             *      C >= 2 * sqrt(2)
+             * In conclusion:
+             * Triangular sum strategy give worst-case tosses = 2sqrt(2) * sqrt(T)
+             * It achieve a tighter bound and more efficient
+            ***************************************************************** */
             @Override
             public Result getWorstCase(EggDropBuilding building) {
-                return new Result(2, 3 * sqrt(building.getThreshold()));
+                return new Result(2, 2 * sqrt(2 * building.getThreshold()));
             }
         };
 
@@ -332,7 +335,7 @@ public class EggDropStrategy {
     // Test client
     public static void main(String[] args) {
         // Create an EggDropBuilding(total floors, threshold) object
-        EggDropBuilding building = new EggDropBuilding(100, 55);
+        EggDropBuilding building = new EggDropBuilding(100, 73);
 
         // Enumerate the EggDropStrategy version
         for (StrategyVersion strategy : StrategyVersion.values()) {
