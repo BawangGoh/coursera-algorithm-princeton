@@ -33,6 +33,20 @@ public class EggDropBuilding {
         this.k = k;
     }
 
+    /* *************************************************************************
+     * Constructor for Dynamic Programming:
+     * It does not depend on threshold floor and return the minimum # of tosses
+     * needed in worst case to determine the highest floor from which an egg can
+     * be dropped without breaking. Therefore, we can simple equate # of floor
+     * to threshold floor (n = k)
+     ************************************************************************ */
+    public EggDropBuilding(int n) {
+        if (n < 0) {
+            throw new IllegalArgumentException("n must be positive integer");
+        }
+        this.n = this.k = n;
+    }
+
     // Getter method
     public int getTotalFloor() {
         return n;
