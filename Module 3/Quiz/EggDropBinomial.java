@@ -205,9 +205,9 @@ public class EggDropBinomial {
      *                                                 coeff(x, 1)
      * Finally, we got the following f(x, n) in term of binomial coefficient:
      *      f(x, n) = Sum_{i = 1, ..., n} coeff(x, i)
-     * Let suppose we cover the building for k floor using N eggs and no more
+     * Let suppose we cover the building for f floor using N eggs and no more
      * than x attempts in worst cases:
-     *      f(x, N) >= y
+     *      f(x, N) >= f
      *      Sum_{i = 1, ..., N} coeff(x, i) >= f
      * Reduce further binomial coefficient to efficient computation without
      * computing the full factorials.
