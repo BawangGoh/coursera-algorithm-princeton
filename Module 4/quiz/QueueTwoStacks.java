@@ -5,6 +5,7 @@
  **************************************************************************** */
 
 /* *****************************************************************************
+ * Queue with two stacks:
  * Implementing a queue using two stacks (in & out). For IN stack, simple
  * operation like enqueue since queue is an FIFO data structure. For OUT stack,
  * it need to reverse the order of the IN stack in order to dequeue the element.
