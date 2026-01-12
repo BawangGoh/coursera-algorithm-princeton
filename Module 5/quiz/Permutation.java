@@ -83,7 +83,7 @@ public class Permutation {
      * 2) Loop through b[] and get the keys for a{} mapping
      ************************************************************************ */
     public static boolean isPermutateHash(int[] a, int[] b) {
-        // Pre-sizing the set to avoid rehashes (resize) to a larget capacity
+        // Pre-sizing the set to avoid rehashes (resize) to a larger capacity
         // Default load factor was 0.75 (3/4) => rehashes when reach 3rd element
         Map<Integer, Integer> freq = new HashMap<>(a.length * 2);
 
