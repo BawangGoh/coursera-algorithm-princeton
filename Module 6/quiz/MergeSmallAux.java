@@ -26,7 +26,7 @@ public class MergeSmallAux {
 
         // copy left half to aux[mid + 1] because round_down(odd/2) => mid + 1
         int[] aux = new int[mid + 1];
-        for (int k = 0; k <= mid; k++) {
+        for (int k = lo; k <= mid; k++) {
             aux[k] = arr[k];
         }
 

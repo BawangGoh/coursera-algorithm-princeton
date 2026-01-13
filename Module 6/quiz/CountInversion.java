@@ -11,6 +11,7 @@
  * count the number of inversions.
  **************************************************************************** */
 import edu.princeton.cs.algs4.StdOut;
+import java.util.Arrays;
 
 public class CountInversion {
     /* *************************************************************************
@@ -35,16 +36,15 @@ public class CountInversion {
      * At i++ = 2, j = 4 => inversion happened (arr[4] < aux[2])
      * Inversion: mid - i + 1 = 2 - 2 + 1 = 1 (since only 6 < 7)
      ************************************************************************ */
-    private static int merge(int[] arr, int lo, int mid, int hi) {
-        // copy left half to aux[mid]
-        int[] aux = new int[mid + 1];
-        for (int k = 0; k <= mid; k++) {
-            aux[k] = arr[k];
+    private static int merge(int[] arr, int[] aux, int lo, int mid, int hi) {
+        // Copy left half subarray (lo ... mid)
+        for (int k = lo; k <= mid; k++) {
+            aux[k - lo] = arr[k];   // Offset by k - lo
         }
 
-        // merge back to arr[]
+        // merge back to arr[], i always start from 0 for aux[0 ... mid - 1]
         int count = 0;
-        for (int k = lo, i = lo, j = mid + 1; k <= hi; k++) {
+        for (int k = lo, i = 0, j = mid + 1; k <= hi; k++) {
             if (i > mid) {
                 // Left exhausted
                 arr[k] = arr[j++];
@@ -60,26 +60,33 @@ public class CountInversion {
             else {
                 // Take right (inversion happened where j is always > i)
                 arr[k] = arr[j++];
-                count += (mid - i + 1);
+                int leftLen = mid - lo + 1;     // Left subarray length
+                count += (leftLen - i);
             }
         }
         return count;
     }
 
-    private static int sort(int[] arr, int lo, int hi) {
+    // Better space-optimized: one-time auxiliary array allocation for reuse
+    private static int sort(int[] arr) {
+        int[] aux = new int[(arr.length + 1) / 2];  // Ceiling number of element
+        return sort(arr, aux, 0, arr.length - 1);
+    }
+
+    private static int sort(int[] arr, int[] aux, int lo, int hi) {
         if (hi <= lo) return 0;
         int mid = lo + (hi - lo) / 2;
         int count = 0;
 
         // Divide and conquer (resursive sort)
-        count += sort(arr, lo, mid);
-        count += sort(arr, mid + 1, hi);
+        count += sort(arr, aux, lo, mid);
+        count += sort(arr, aux, mid + 1, hi);
 
         // Optional micro-optimization: if already ordered, skip merge.
         if (arr[mid] <= arr[mid + 1]) return count;
 
         // Merge
-        count += merge(arr, lo, mid, hi);
+        count += merge(arr, aux, lo, mid, hi);
 
         return count;
     }
@@ -87,7 +94,7 @@ public class CountInversion {
     public static void main(String[] args) {
 //        int[] test = {2, 11, 6, 3, 7, 5, 10};
         int[] test = {2, 5, 7, 1, 6};
-        int inv = sort(test, 0, test.length - 1);
+        int inv = sort(test);
         StdOut.println(inv);
     }
 }
