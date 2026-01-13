@@ -11,7 +11,6 @@
  * a[2*n - 1] is sorted using an auxiliary array of length n (instead of 2n) ?
  **************************************************************************** */
 import edu.princeton.cs.algs4.StdOut;
-import java.util.Arrays;
 
 public class MergeSmallAux {
     /* *************************************************************************
@@ -32,7 +31,7 @@ public class MergeSmallAux {
         }
 
         // merge back to a[]
-        for (int k = 0, i = lo, j = mid + 1; k <= hi; k++) {
+        for (int k = lo, i = lo, j = mid + 1; k <= hi; k++) {
             // Left subarray is exhausted (Copy the rest from right)
             if (i > mid) arr[k] = arr[j++];
 
