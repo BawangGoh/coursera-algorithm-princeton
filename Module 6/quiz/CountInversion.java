@@ -95,6 +95,7 @@ public class CountInversion {
 //        int[] test = {2, 11, 6, 3, 7, 5, 10};
         int[] test = {2, 5, 7, 1, 6};
         int inv = sort(test);
+        StdOut.println(Arrays.toString(test));
         StdOut.println(inv);
     }
 }
