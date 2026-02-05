@@ -45,6 +45,8 @@ public class Permutation {
      * X-order: 7 = 7 => count++, i++, j++
      ************************************************************************ */
     public static int countIntersectSort(Point2D[] a, Point2D[] b) {
+        // If comparator does not provided in sorting algorithm, it will use
+        // natural ordering defined in comparable interface compareTo()
         Shell.sort(a);
         Shell.sort(b);
         int i = 0, j = 0, count = 0;
