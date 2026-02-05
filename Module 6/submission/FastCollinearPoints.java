@@ -41,7 +41,13 @@ import java.util.Arrays;
 import java.util.List;
 
 public class FastCollinearPoints {
-    private final List<LineSegment> lineSegment = new ArrayList<>();
+    /*
+     'Freeze-and-clone' pattern for better API design by declaring final object
+     array (Object[]) ensure internal representation cannot change after
+     construction. Although both final Object[] (pre-sized) vs final List<Object>
+     (dynamic) allow for content mutability but both cannot be reassigned.
+     */
+    private final LineSegment[] lineSegment;
 
     // Constructor: finds all line segments containing 4 points
     public FastCollinearPoints(Point[] points) {
@@ -68,8 +74,14 @@ public class FastCollinearPoints {
             }
         }
 
+        /*
+            Use dynamic array to discover segment because we do not know the
+            final count ahead on LineSegment[] (pre-sized Object array)
+         */
+        List<LineSegment> found = new ArrayList<>();
+
         // Loop till n - 3 (searching for other 3 collinear points)
-        for (int i = 0; i < n - 3; i++) {
+        for (int i = 0; i < n; i++) {
             Point origin = copy[i];
 
             // Copy points since every point have different slope order
@@ -111,12 +123,15 @@ public class FastCollinearPoints {
                     // Enforce uniqueness: only add if 'origin' is the smallest
                     // point in the set
                     if (origin.compareTo(min) == 0) {
-                        lineSegment.add(new LineSegment(min, max));
+                        found.add(new LineSegment(min, max));
                     }
                 }
-                // continue with next slope run (j already advanced
+                // continue with next slope run (j already advanced)
             }
         }
+
+        // Freeze into an array for immutability
+        lineSegment = found.toArray(new LineSegment[0]);
     }
 
     // Number of line segments
@@ -127,11 +142,14 @@ public class FastCollinearPoints {
     // Line segments
     public LineSegment[] segments() {
         /*
-         Preferred method: Pass an empty array of the Object type to specify the
-         runtime type of the resulting array to avoid the need for casting each
-         element
+        Should not return the internal array (leak mutability) instead return
+        defensive copy via clone(). Calling segments() multiple times pay the
+        cost of conversion arrayList to array than only clone a pre-sized array.
+        E.g.
+            return lineSegment.toArray(new LineSegment[0]) => slower
+            return lineSegments.clone() => faster
          */
-        return lineSegment.toArray(new LineSegment[0]);
+        return lineSegment.clone();
     }
 
     // Optional: Client API test
